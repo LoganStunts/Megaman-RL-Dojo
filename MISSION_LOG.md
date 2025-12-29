@@ -2,45 +2,33 @@
 
 **Start Date:** Dec 29, 2025
 **Objective:** Establish a robust, version-controlled training pipeline between Local Godot and Google Colab using GitHub as the relay.
-**Status:** 🟡 **UNCONFIRMED** (Local Build Ready, Cloud Test Pending)
+**Status:** 🟡 **CALIBRATING** (Infrastructure Success, Logic Failure)
 
 ---
 
-## 1. STRATEGY: "THE RELAY"
-We are abandoning the "Zip File" method due to path corruption.
-**New Architecture:**
-*   **Repo:** `Megaman_Clean_Repo` (Local) -> `Megaman-RL-Dojo` (GitHub).
-*   **Branching Model:**
-    *   `main`: **The Loader**. Contains only infrastructure (`.ipynb`, `requirements.txt`).
-    *   `payload/main`: **The Muscle**. Contains the Godot Project assets (`.tscn`, `.glb`, `.gd`).
+## 1. INCIDENT REPORT: "THE SILENT KILLER" (Dec 29, 14:00)
+**Symptoms:**
+*   `explained_variance` flatlined at 0.
+*   `value_loss` infinitesimally small (2.6e-05).
+*   `approx_kl` exploding (0.6+).
 
-## 2. MANIFEST: THE CLEAN REPO
-We have surgically extracted ONLY the essential files from the chaotic `Gym_Project`.
+**Diagnosis:**
+The agent suffered from **Signal Vanishing**. The rewards from Godot were likely too small (e.g., 0.001), causing the brain to treat them as zero. Without normalization, the PPO algorithm couldn't distinguish good actions from bad ones, leading to "thrashing" (random flailing).
 
-### Infrastructure (Root)
-*   `Colab_Launcher.ipynb`: The notebook that runs on Google's servers.
-*   `requirements.txt`: Python dependencies (`godot_rl`, `stable-baselines3`, `shimmy`, `onnx`).
-*   `.gitignore`: Strict filters to prevent `.godot/` cache corruption.
+**Corrective Action:**
+We are abandoning the default `gdrl` CLI tool. We will inject a custom Python training script (`train_optimized.py`) that:
+1.  Wraps the environment in `VecNormalize` (Auto-scales rewards/observations).
+2.  Lowers `learning_rate` to `1e-4`.
+3.  Tightens `clip_range` to `0.1` to stop thrashing.
+4.  Implements auto-save checkpoints to Drive.
 
-### Payload (The Body)
-*   `project.godot`: Configured for Godot 4.5.1 / Mobile.
-*   `Tinpet_Male_New.glb`: **[VERIFIED]** 3D Model Asset (formerly missing).
-*   `_gym/Training_Gym.tscn`: The physical environment.
-*   `_body/Tinpet_RL.tscn`: The agent scene.
-*   `_brain/tinpet_ai_controller.gd`: The logic script (Observation/Action definition).
-*   `_brain/reward_function.gd`: **[VERIFIED]** The motivation logic.
-*   `addons/godot_rl_agents/`: The interface plugin.
+## 2. MANIFEST updates
+*   **New File:** `train_optimized.py` (The Custom Trainer).
+*   **Launcher Update:** `Colab_Launcher.ipynb` will now execute `python train_optimized.py` instead of `gdrl`.
 
 ## 3. CURRENT STATE
-*   **Local Compilation:** SUCCESS. Files migrated to `Documents\Megaman_Clean_Repo`.
-*   **GitHub Remote:** PENDING. User needs to create `Megaman-RL-Dojo`.
-*   **Colab Execution:** PENDING.
-
-## 4. NEXT STEPS
-1.  Initialize Git Repo locally.
-2.  Push `main` (Infrastructure).
-3.  Branch to `payload/main` and push (Project).
-4.  Open Notebook in Colab and fire the engine.
+*   **Infrastructure:** Stable (XVFB + Colab).
+*   **Training Logic:** UNSTABLE (Needs Normalization).
 
 ---
-*Log initialized. Monitoring for errors...*
+*Log updated.*
