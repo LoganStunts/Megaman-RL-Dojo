@@ -1,19 +1,21 @@
-{
+import json
+
+notebook = {
  "cells": [
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# \ud83e\udd16 Megaman RL Training Facility (The Dojo)\n",
+    "# 🤖 Megaman RL Training Facility (The Dojo)\n",
     "\n",
-    "### \ud83d\udccb Instructions\n",
+    "### 📋 Instructions\n",
     "1. **Runtime:** Ensure you are using **T4 GPU** (Runtime -> Change runtime type).\n",
     "2. **Run All:** Execute the cells below in order."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": None,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -24,21 +26,21 @@
     "REPO_NAME = \"Megaman-RL-Dojo\"\n",
     "\n",
     "if not os.path.exists(REPO_NAME):\n",
-    "    print(f\"\ud83d\udce5 Cloning {REPO_NAME}...\")\n",
+    "    print(f\"📥 Cloning {REPO_NAME}...\")\n",
     "    !git clone {REPO_URL}\n",
     "else:\n",
-    "    print(f\"\ud83d\udd04 Updating {REPO_NAME}...\")\n",
+    "    print(f\"🔄 Updating {REPO_NAME}...\")\n",
     "    %cd {REPO_NAME}\n",
     "    !git pull\n",
     "    %cd ..\n",
     "\n",
     "%cd {REPO_NAME}\n",
-    "print(\"\u2705 Repo Ready.\")"
+    "print(\"✅ Repo Ready.\")"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": None,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -49,17 +51,17 @@
     "!pip install -r requirements.txt\n",
     "\n",
     "if not os.path.exists(\"Godot_v4.5.1-stable_linux.x86_64\"):\n",
-    "    print(\"\u2b07\ufe0f Downloading Godot 4.5.1...\")\n",
+    "    print(\"⬇️ Downloading Godot 4.5.1...\")\n",
     "    !wget https://github.com/godotengine/godot/releases/download/4.5.1-stable/Godot_v4.5.1-stable_linux.x86_64.zip\n",
     "    !unzip -o Godot_v4.5.1-stable_linux.x86_64.zip\n",
     "    !chmod +x Godot_v4.5.1-stable_linux.x86_64\n",
     "else:\n",
-    "    print(\"\u2705 Godot binary found.\")"
+    "    print(\"✅ Godot binary found.\")"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": None,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -69,12 +71,12 @@
     "!git fetch origin\n",
     "!git checkout {TARGET_BRANCH}\n",
     "!git pull origin {TARGET_BRANCH}\n",
-    "print(f\"\u2705 Switched to {TARGET_BRANCH} (Latest Version).\")"
+    "print(f\"✅ Switched to {TARGET_BRANCH} (Latest Version).\")"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": None,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -87,7 +89,7 @@
     "time.sleep(2)\n",
     "\n",
     "# 2. Import Assets (Headless)\n",
-    "print(\"\ud83d\udce6 Importing assets...\")\n",
+    "print(\"📦 Importing assets...\")\n",
     "with open(\"godot_import.log\", \"w\") as f:\n",
     "    # We use the FULL PATH to the binary\n",
     "    import_process = subprocess.Popen(\n",
@@ -98,13 +100,13 @@
     "\n",
     "# Check if import succeeded\n",
     "if import_process.returncode != 0:\n",
-    "    print(\"\u274c Import Failed! Checking logs...\")\n",
+    "    print(\"❌ Import Failed! Checking logs...\")\n",
     "    !cat godot_import.log\n",
     "else:\n",
-    "    print(\"\u2705 Assets imported.\")\n",
+    "    print(\"✅ Assets imported.\")\n",
     "\n",
     "# 3. Launch Python Trainer\n",
-    "print(\"\ud83e\udde0 Attaching Neural Interface...\")\n",
+    "print(\"🧠 Attaching Neural Interface...\")\n",
     "# We use the FULL PATH to the binary\n",
     "!gdrl --env_path=$(pwd)/Godot_v4.5.1-stable_linux.x86_64"
    ]
@@ -132,3 +134,6 @@
  "nbformat": 4,
  "nbformat_minor": 5
 }
+
+with open("C:/Users/logan/Documents/Megaman_Clean_Repo/Colab_Launcher.ipynb", "w", encoding="utf-8") as f:
+    json.dump(notebook, f, indent=1)
