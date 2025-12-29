@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Mega Man Personal Assistant"
-run/main_scene="uid://hf71owucyrwi"
+run/main_scene="res://_gym/Training_Gym.tscn"
 config/features=PackedStringArray("4.5", "Mobile")
 
 [audio]
