@@ -70,7 +70,8 @@ def main():
     os.makedirs(dest_path, exist_ok=True)
     
     try:
-        cmd = f"7z x -p{ENCRYPTION_PASS} -y -o{dest_path} {zip_file}"
+        # Decrypt (No Password)
+        cmd = f"7z x -y -o{dest_path} {zip_file}"
         run_command(cmd)
         
         # Rename inner zip

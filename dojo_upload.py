@@ -33,8 +33,8 @@ def main():
     output_zip = f"{FILE_NAME}_secure.7z"
     print(f"🔒 Encrypting payload to {output_zip}...")
     
-    # -p{PASS} sets password, -y answers yes to prompts
-    cmd = f"7z a -t7z -p{ENCRYPTION_PASS} -y {output_zip} {source_model} {source_norm}"
+    # -y answers yes to prompts
+    cmd = f"7z a -t7z -y {output_zip} {source_model} {source_norm}"
     run_command(cmd, shell=True)
 
     # 3. Git Configuration
