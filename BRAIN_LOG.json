@@ -1,0 +1,10 @@
+{
+    "Headcrab_Interrupted_12-30-1015": {
+        "model": "Headcrab",
+        "concept": "Interrupted",
+        "timestamp": "12-30-1015",
+        "path": "_brain/_LIBRARY/Headcrab/Headcrab_Interrupted_12-30-1015",
+        "zip_file": "_brain/_LIBRARY/Headcrab/Headcrab_Interrupted_12-30-1015/Headcrab_Interrupted_12-30-1015.zip",
+        "notes": "Colab run interrupted at ~750k steps due to low speed (250 FPS). RayCasts were active."
+    }
+}
