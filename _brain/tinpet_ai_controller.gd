@@ -82,6 +82,10 @@ func _setup_teacher():
 	
 	anim_player.add_animation_library("", library)
 
+func reset():
+	super.reset()
+	reset_teacher()
+
 func reset_teacher():
 	# Pick a random starting state
 	var roll = randf()

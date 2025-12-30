@@ -6,5 +6,13 @@
         "path": "_brain/_LIBRARY/Headcrab/Headcrab_Interrupted_12-30-1015",
         "zip_file": "_brain/_LIBRARY/Headcrab/Headcrab_Interrupted_12-30-1015/Headcrab_Interrupted_12-30-1015.zip",
         "notes": "Colab run interrupted at ~750k steps due to low speed (250 FPS). RayCasts were active."
+    },
+    "Headcrab_FirstSteps_12-30-1230": {
+        "model": "Headcrab",
+        "concept": "FirstSteps",
+        "timestamp": "12-30-1230",
+        "path": "_brain/_LIBRARY/Headcrab/Headcrab_FirstSteps_12-30-1230",
+        "zip_file": "_brain/_LIBRARY/Headcrab/Headcrab_FirstSteps_12-30-1230/Headcrab_FirstSteps_12-30-1230.zip",
+        "notes": "Manually downloaded checkpoint from successful start of Headcrab run. Naming corrected to 12-30."
     }
 }
