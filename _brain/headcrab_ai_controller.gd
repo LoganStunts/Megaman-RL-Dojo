@@ -7,6 +7,7 @@ var root_bone: PhysicalBone3D
 var physical_bones: Array[PhysicalBone3D] = []
 var pb_cache = {}
 var target_node: Node3D
+var raycasts: Array[RayCast3D] = []
 
 func _ready():
 	super._ready()
@@ -24,6 +25,7 @@ func _ready():
 
 	# 2. Setup Ragdoll
 	_setup_ragdoll()
+	_setup_rays()
 	
 	# 3. Cache target
 	target_node = get_parent().find_child("Target", true, false)
@@ -52,6 +54,27 @@ func _setup_ragdoll():
 
 	simulator.physical_bones_start_simulation()
 	skeleton.physical_bones_start_simulation()
+
+func _setup_rays():
+	if not root_bone: return
+	
+	# Create 5 rays: Center + 4 Corners relative to root
+	var offsets = [
+		Vector3(0, 0, 0),        # Center
+		Vector3(0.2, 0, 0.2),    # Front-Left (Approx)
+		Vector3(-0.2, 0, 0.2),   # Front-Right
+		Vector3(0.2, 0, -0.2),   # Back-Left
+		Vector3(-0.2, 0, -0.2)   # Back-Right
+	]
+	
+	for offset in offsets:
+		var ray = RayCast3D.new()
+		ray.position = offset
+		ray.target_position = Vector3(0, -2.0, 0) # 2 meters down
+		ray.enabled = true
+		ray.exclude_parent = true # Don't hit self
+		root_bone.add_child(ray)
+		raycasts.append(ray)
 
 func create_physical_bone(bone_name: String) -> PhysicalBone3D:
 	var bone_idx = skeleton.find_bone(bone_name)
@@ -91,6 +114,16 @@ func get_obs() -> Dictionary:
 	for bone in physical_bones:
 		var q = bone.global_transform.basis.get_rotation_quaternion()
 		obs.append_array([q.x, q.y, q.z, q.w])
+
+	# 3. Raycast Sensors (Ground Detection)
+	for ray in raycasts:
+		ray.force_raycast_update()
+		if ray.is_colliding():
+			var hit_point = ray.get_collision_point()
+			var dist = ray.global_position.distance_to(hit_point)
+			obs.append(dist)
+		else:
+			obs.append(2.0) # Max distance
 
 	# Target size 128 (padding)
 	while obs.size() < 128: obs.append(0.0)
