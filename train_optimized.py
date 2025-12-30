@@ -71,7 +71,7 @@ print(f"💾 Checkpoints saving to: {args.save_path}")
 
 try:
     model.learn(total_timesteps=TOTAL_STEPS, callback=checkpoint_callback, reset_num_timesteps=False)
-    model.save(f"{args.save_path}/final_model")
+    model.save(f"{args.save_path}/headcrab_final")
     env.save(f"{args.save_path}/vec_normalize.pkl") # Save normalization stats!
     print("✅ Training Complete.")
 except KeyboardInterrupt:
