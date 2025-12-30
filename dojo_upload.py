@@ -5,7 +5,6 @@ import argparse
 # Configuration
 BRANCH_NAME = "results/headcrab"
 FILE_NAME = "headcrab_final"
-ENCRYPTION_PASS = "Headcrab_2025" # Simple password for now (we can make this a secret later)
 USER_NAME = "Dojo Bot"
 USER_EMAIL = "dojo@megaman.ai"
 
@@ -25,7 +24,11 @@ def main():
     source_norm = "logs/checkpoints/vec_normalize.pkl"
     
     if not os.path.exists(source_model):
-        print(f"❌ Critical: {source_model} not found!")
+        print(f"⚠️ {source_model} not found. Checking for interrupted model...")
+        source_model = "logs/checkpoints/headcrab_interrupted.zip"
+    
+    if not os.path.exists(source_model):
+        print(f"❌ Critical: No model found in logs/checkpoints/!")
         exit(1)
 
     # 2. Encrypt & Zip

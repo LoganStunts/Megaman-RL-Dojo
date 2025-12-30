@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Mega Man Personal Assistant"
+config/name="Headcrab RL Dojo"
 run/main_scene="res://_gym/Headcrab_Gym.tscn"
 config/features=PackedStringArray("4.5", "Mobile")
 

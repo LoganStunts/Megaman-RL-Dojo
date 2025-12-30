@@ -76,7 +76,7 @@ try:
     print("✅ Training Complete.")
 except KeyboardInterrupt:
     print("⚠️ Training Interrupted. Saving emergency backup...")
-    model.save(f"{args.save_path}/interrupted_model")
+    model.save(f"{args.save_path}/headcrab_interrupted")
     env.save(f"{args.save_path}/vec_normalize.pkl")
 finally:
     env.close()
