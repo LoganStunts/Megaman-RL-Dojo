@@ -1,0 +1,74 @@
+[gd_scene load_steps=12 format=3 uid="uid://crab_gym"]
+
+[ext_resource type="PackedScene" path="res://_body/headcrab_scaled.glb" id="1_crab"]
+[ext_resource type="Script" path="res://_brain/headcrab_ai_controller.gd" id="2_controller"]
+[ext_resource type="Script" uid="uid://xo0kj55k2xke" path="res://addons/godot_rl_agents/sync.gd" id="3_sync"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+sky_top_color = Color(0.1, 0.1, 0.2, 1)
+sky_horizon_color = Color(0.3, 0.1, 0.1, 1)
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 2
+sky = SubResource("Sky_1")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.2, 0.2, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+material = SubResource("StandardMaterial3D_floor")
+size = Vector3(50, 1, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_target"]
+albedo_color = Color(0, 1, 0, 1)
+emission_enabled = true
+emission = Color(0, 1, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_target"]
+material = SubResource("StandardMaterial3D_target")
+radius = 0.2
+height = 0.4
+
+[node name="Headcrab_Gym" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866, 0, -0.866, 0.5, 0, 15, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_floor")
+
+[node name="Target" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 3.0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Target"]
+mesh = SubResource("SphereMesh_target")
+
+[node name="Headcrab" parent="." instance=ExtResource("1_crab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+script = ExtResource("2_controller")
+
+[node name="Sync" type="Node" parent="."]
+script = ExtResource("3_sync")
+speed_up = 1.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 3, 7)
+current = true

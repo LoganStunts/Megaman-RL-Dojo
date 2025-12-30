@@ -50,25 +50,27 @@ env = VecNormalize(env, norm_obs=True, norm_reward=True, clip_obs=10.0)
 checkpoint_callback = CheckpointCallback(
     save_freq=50000, 
     save_path=args.save_path,
-    name_prefix="megaman_ppo"
+    name_prefix="headcrab_ppo"
 )
 
-# 6. Initialize Model (Optimized Hyperparameters)
+# 6. Load Model (Fresh Start for Headcrab)
+print("🧠 Starting fresh Headcrab neural network...")
 model = PPO(
     "MultiInputPolicy", 
     env, 
     verbose=1,
-    learning_rate=0.0001, # Lowered from 0.0003 to stabilize
-    clip_range=0.1,       # Tightened from 0.2 to prevent thrashing
+    learning_rate=0.0003, # Slightly higher LR for initial learning
+    clip_range=0.2,
     tensorboard_log=f"{args.save_path}/../tensorboard"
 )
 
-# 7. Train
-print(f"🚀 Starting Training for {args.timesteps} steps...")
+# 7. Train (Long Session)
+TOTAL_STEPS = 10000000 # 10 Million Steps
+print(f"🚀 Starting Marathon Training for {TOTAL_STEPS} steps...")
 print(f"💾 Checkpoints saving to: {args.save_path}")
 
 try:
-    model.learn(total_timesteps=args.timesteps, callback=checkpoint_callback)
+    model.learn(total_timesteps=TOTAL_STEPS, callback=checkpoint_callback, reset_num_timesteps=False)
     model.save(f"{args.save_path}/final_model")
     env.save(f"{args.save_path}/vec_normalize.pkl") # Save normalization stats!
     print("✅ Training Complete.")
