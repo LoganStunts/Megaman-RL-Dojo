@@ -137,24 +137,32 @@ func create_physical_bone(bone_name: String) -> PhysicalBone3D:
 	var bone_global_pose = skeleton.get_bone_global_pose(bone_idx)
 	pb.global_transform = skeleton.global_transform * bone_global_pose
 	pb_cache[bone_name] = pb
-	var shape = CollisionShape3D.new()
-	var capsule = CapsuleShape3D.new()
-	capsule.radius = 0.03
-	capsule.height = 0.1
-	shape.shape = capsule
-	pb.add_child(shape)
 	
-	# Debug Mesh
-	var mesh_inst = MeshInstance3D.new()
-	var mesh = CapsuleMesh.new()
-	mesh.radius = 0.03
-	mesh.height = 0.1
-	var mat = StandardMaterial3D.new()
-	mat.albedo_color = Color.RED
-	mat.no_depth_test = true
-	mesh.material = mat
-	mesh_inst.mesh = mesh
-	pb.add_child(mesh_inst)
+	var shape = CollisionShape3D.new()
+	var col_shape
+	
+	# --- SMART COLLISION SIZING ---
+	if "pelvis" in bone_name:
+		col_shape = BoxShape3D.new()
+		col_shape.size = Vector3(0.15, 0.1, 0.1) # Wide hips
+	elif "foot" in bone_name:
+		col_shape = BoxShape3D.new()
+		col_shape.size = Vector3(0.06, 0.03, 0.12) # Flat soles for balance
+	elif "head" in bone_name:
+		col_shape = SphereShape3D.new()
+		col_shape.radius = 0.08
+	elif "spine" in bone_name:
+		col_shape = CapsuleShape3D.new()
+		col_shape.radius = 0.08
+		col_shape.height = 0.2
+	else:
+		# Standard Limbs
+		col_shape = CapsuleShape3D.new()
+		col_shape.radius = 0.025
+		col_shape.height = 0.15
+	
+	shape.shape = col_shape
+	pb.add_child(shape)
 	return pb
 
 func create_limb(bone_name: String, parent_bone_name: String):

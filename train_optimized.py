@@ -61,6 +61,7 @@ model = PPO(
     verbose=1,
     learning_rate=0.0003, # Slightly higher LR for initial learning
     clip_range=0.2,
+    device="cpu", # FORCE CPU because RTX 5070 (sm_120) is too new for current PyTorch
     tensorboard_log=f"{args.save_path}/../tensorboard"
 )
 
