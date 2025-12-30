@@ -50,11 +50,11 @@ env = VecNormalize(env, norm_obs=True, norm_reward=True, clip_obs=10.0)
 checkpoint_callback = CheckpointCallback(
     save_freq=50000, 
     save_path=args.save_path,
-    name_prefix="headcrab_ppo"
+    name_prefix="megaman_slow"
 )
 
 # 6. Load Model (Fresh Start for Headcrab)
-print("🧠 Starting fresh Headcrab neural network...")
+print("🧠 Starting fresh Megaman (Slow) neural network...")
 model = PPO(
     "MultiInputPolicy", 
     env, 
@@ -71,7 +71,7 @@ print(f"💾 Checkpoints saving to: {args.save_path}")
 
 try:
     model.learn(total_timesteps=TOTAL_STEPS, callback=checkpoint_callback, reset_num_timesteps=False)
-    model.save(f"{args.save_path}/headcrab_final")
+    model.save(f"{args.save_path}/megaman_slow_final")
     env.save(f"{args.save_path}/vec_normalize.pkl") # Save normalization stats!
     print("✅ Training Complete.")
 except KeyboardInterrupt:

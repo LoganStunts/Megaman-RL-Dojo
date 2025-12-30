@@ -3,9 +3,9 @@ import subprocess
 import argparse
 
 # Configuration
-BRANCH_NAME = "results/headcrab"
-FILE_NAME = "headcrab_final"
-ENCRYPTION_PASS = "Headcrab_2025" # Simple password for now (we can make this a secret later)
+BRANCH_NAME = "results/megaman_slow"
+FILE_NAME = "megaman_slow_final"
+ENCRYPTION_PASS = "Megaman_Slow_2025" # Unique pass
 USER_NAME = "Dojo Bot"
 USER_EMAIL = "dojo@megaman.ai"
 

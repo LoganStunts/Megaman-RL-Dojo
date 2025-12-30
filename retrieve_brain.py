@@ -3,10 +3,10 @@ import subprocess
 import shutil
 
 # Config
-BRANCH_NAME = "results/headcrab"
-FILE_NAME = "headcrab_final"
-ENCRYPTION_PASS = "Headcrab_2025"
-DEST_DIR = "_brain/headcrab_v2" # v2 because v1 was the manual download attempt
+BRANCH_NAME = "results/megaman_slow"
+FILE_NAME = "megaman_slow_final"
+ENCRYPTION_PASS = "Megaman_Slow_2025"
+DEST_DIR = "_brain/megaman_slow_v1"
 
 def run_command(cmd):
     print(f"🔧 Running: {' '.join(cmd)}")

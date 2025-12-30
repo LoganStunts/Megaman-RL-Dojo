@@ -1,17 +1,8 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=12 format=3 uid="uid://tfiui5rb4tqr"]
 
 [ext_resource type="PackedScene" path="res://_body/Tinpet_RL.tscn" id="1_tinpet"]
-[ext_resource type="Script" path="res://addons/godot_rl_agents/sync.gd" id="2_sync"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_red"]
-albedo_color = Color(1, 0, 0, 1)
-emission_enabled = true
-emission = Color(1, 0, 0, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_target"]
-material = SubResource("StandardMaterial3D_red")
-radius = 0.5
-height = 1.0
+[ext_resource type="Script" uid="uid://xo0kj55k2xke" path="res://addons/godot_rl_agents/sync.gd" id="2_sync"]
+[ext_resource type="PackedScene" path="res://VR_Observer.tscn" id="VR_Observer_tscn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
@@ -37,15 +28,28 @@ albedo_color = Color(0.5, 0.5, 0.5, 1)
 material = SubResource("StandardMaterial3D_floor")
 size = Vector3(50, 1, 50)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_red"]
+albedo_color = Color(1, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_target"]
+material = SubResource("StandardMaterial3D_red")
+radius = 0.1
+height = 0.2
+
 [node name="Training_Gym" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)
-light_energy = 5.0
+transform = Transform3D(1, 0, 0, 0, 0.536961, 0.843606, 0, -0.843606, 0.536961, 0, 15.6599, 0)
 shadow_enabled = true
+
+[node name="VR_Observer" parent="." instance=ExtResource("VR_Observer_tscn")]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
 
 [node name="Floor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -57,13 +61,14 @@ shape = SubResource("BoxShape3D_floor")
 mesh = SubResource("BoxMesh_floor")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.86602527, 0.50000036, 0, -0.5000003, 0.86602527, 0, 5.4111767, 6.389408)
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 2.5, 5)
+current = true
 
 [node name="Tinpet_RL" parent="." instance=ExtResource("1_tinpet")]
-transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, 0, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Target" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 2.2358575)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Target"]
 mesh = SubResource("SphereMesh_target")
