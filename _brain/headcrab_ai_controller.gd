@@ -50,7 +50,11 @@ func _setup_ragdoll():
 	for child in simulator.get_children():
 		if child is PhysicalBone3D:
 			physical_bones.append(child)
-			if child.bone_name == "root": root_bone = child
+			if child.bone_name == "root": 
+				root_bone = child
+				# --- LANDING STABILITY ---
+				root_bone.linear_damp = 2.0 # Stick the landing
+				root_bone.angular_damp = 1.0
 
 	simulator.physical_bones_start_simulation()
 	skeleton.physical_bones_start_simulation()
@@ -137,20 +141,35 @@ func get_reward() -> float:
 	var dist = root_bone.global_position.distance_to(target_node.global_position)
 	var reward = 0.0
 	
-	# Reward for proximity
-	reward += (5.0 - dist) * 0.1
+	# 1. Proximity (The closer, the better)
+	reward += (10.0 - dist) * 0.1
 	
-	# Bonus for speed toward target
-	var velocity_dot = root_bone.linear_velocity.dot((target_node.global_position - root_bone.global_position).normalized())
-	reward += velocity_dot * 0.5
+	# 2. THE POUNCE (Horizontal Speed toward target + Vertical Launch)
+	var to_target_dir = (target_node.global_position - root_bone.global_position).normalized()
+	var horizontal_vel = Vector3(root_bone.linear_velocity.x, 0, root_bone.linear_velocity.z)
+	var speed_toward_target = horizontal_vel.dot(to_target_dir)
 	
-	# Massive bonus for contact
-	if dist < 0.2:
-		reward += 10.0
+	reward += speed_toward_target * 0.5
+	
+	# 3. JUMP INCENTIVE
+	# If he is moving fast toward target, reward being in the air (Y position)
+	if speed_toward_target > 1.0:
+		var height_off_ground = root_bone.global_position.y - 0.1
+		reward += height_off_ground * 2.0 # Massive bonus for "Air Time" while charging
 		
-	# Penalty for upside down
-	if root_bone.global_transform.basis.y.dot(Vector3.UP) < 0.0:
-		reward -= 1.0
+	# 4. CONTACT JACKPOT (The Strike)
+	if dist < 0.3:
+		reward += 20.0
+		needs_reset = true # Success! Reset for next hunt.
+		
+	# 5. UPRIGHT PENALTY
+	if root_bone.global_transform.basis.y.dot(Vector3.UP) < 0.5:
+		reward -= 2.0
+
+	# 6. GROUND CLEARANCE (The "Stay Off the Floor" Rule)
+	# Massive incentive to keep the main body high up.
+	if root_bone.global_position.y > 0.2:
+		reward += 10.0 # Reward for being airborne/tall
 		
 	return reward
 
