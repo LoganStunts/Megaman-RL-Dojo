@@ -48,9 +48,9 @@ env = VecNormalize(env, norm_obs=True, norm_reward=True, clip_obs=10.0)
 
 # 5. Define Callbacks (Auto-Save)
 checkpoint_callback = CheckpointCallback(
-    save_freq=50000, 
+    save_freq=1800000, # ~Every 15 minutes at 2000 FPS
     save_path=args.save_path,
-    name_prefix="headcrab_ppo"
+    name_prefix="headcrab_predator"
 )
 
 # 6. Load Model (Fresh Start / Refinement)
@@ -59,19 +59,19 @@ model = PPO(
     "MultiInputPolicy", 
     env, 
     verbose=1,
-    learning_rate=0.0001, # Surgical LR
+    learning_rate=0.0001, 
     n_steps=2048,
-    batch_size=128, # Larger batch for stability
+    batch_size=128, 
     n_epochs=10,
     gamma=0.99,
-    clip_range=0.1, # Tight clipping
-    ent_coef=0.01, # Lower entropy to refine learned movements
+    clip_range=0.1, 
+    ent_coef=0.01, 
     tensorboard_log=f"{args.save_path}/../tensorboard"
 )
 
 # 7. Train (Long Session)
-TOTAL_STEPS = 10000000 # 10 Million Steps
-print(f"🚀 Starting Marathon Training for {TOTAL_STEPS} steps...")
+TOTAL_STEPS = 50000000 # 50 Million Steps (~6 Hours)
+print(f"🚀 Starting Midnight Hunt for {TOTAL_STEPS} steps...")
 print(f"💾 Checkpoints saving to: {args.save_path}")
 
 try:
