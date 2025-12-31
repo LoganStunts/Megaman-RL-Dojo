@@ -53,14 +53,19 @@ checkpoint_callback = CheckpointCallback(
     name_prefix="headcrab_ppo"
 )
 
-# 6. Load Model (Fresh Start for Headcrab)
-print("🧠 Starting fresh Headcrab neural network...")
+# 6. Load Model (Fresh Start / Refinement)
+print("🧠 Starting Headcrab Refinement (Surgical Tuning)...")
 model = PPO(
     "MultiInputPolicy", 
     env, 
     verbose=1,
-    learning_rate=0.0003, # Slightly higher LR for initial learning
-    clip_range=0.2,
+    learning_rate=0.0001, # Surgical LR
+    n_steps=2048,
+    batch_size=128, # Larger batch for stability
+    n_epochs=10,
+    gamma=0.99,
+    clip_range=0.1, # Tight clipping
+    ent_coef=0.01, # Lower entropy to refine learned movements
     tensorboard_log=f"{args.save_path}/../tensorboard"
 )
 
